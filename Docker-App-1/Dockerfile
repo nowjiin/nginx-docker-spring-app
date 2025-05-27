@@ -1,5 +1,5 @@
 # OpenJDK 17을 기반으로 하는 경량 이미지 사용
-FROM openjdk:17-jdk-slim
+FROM openjdk:21-slim
 
 # 작업 디렉토리 설정
 WORKDIR /app

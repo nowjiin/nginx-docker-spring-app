@@ -1,8 +1,6 @@
-version: '3.8'
-
 services:
   app1:
-    image: your-dockerhub-username/spring-app1:latest
+    image: nowjin/spring-app1:latest
     container_name: spring-app1
     ports:
       - "8080:8080"
@@ -19,7 +17,7 @@ services:
       - spring-network
 
   app2:
-    image: your-dockerhub-username/spring-app2:latest
+    image: nowjin/spring-app2:latest
     container_name: spring-app2
     ports:
       - "8081:8081"
