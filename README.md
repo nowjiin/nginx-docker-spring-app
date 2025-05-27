@@ -1,6 +1,6 @@
-# Spring Boot Docker 강의 실습
+# Spring Boot Docker
 
-Spring Boot 애플리케이션을 Docker로 컨테이너화하고 Nginx 리버스 프록시를 구성하기 위해서 만든 실습용 프로젝트~
+Spring Boot 애플리케이션을 Docker로 컨테이너화하고 Nginx 리버스 프록시를 구성하기 위해서 만든 프로젝트~
 
 ## 프로젝트 구조
 
