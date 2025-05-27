@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${appName}">Spring Boot App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .app-title {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .port-info {
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .time-info {
+            color: #888;
+            font-size: 1em;
+            margin-bottom: 30px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group input {
+            width: 70%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: #ff6b6b;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .response {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fff3e0;
+            border-radius: 8px;
+            border-left: 4px solid #ff9800;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #f57c00;
+        }
+
+        .loading {
+            background: #e8f5e8;
+            border-left-color: #4caf50;
+            color: #2e7d32;
+        }
+
+        .error {
+            background: #ffebee;
+            border-left-color: #f44336;
+            color: #d32f2f;
+        }
+
+        .footer {
+            margin-top: 30px;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .btn-row {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 class="app-title" th:text="${appName}">Spring Boot App</h1>
+    <p class="port-info">포트: <span th:text="${port}">8081</span></p>
+    <p class="time-info">시작 시간: <span th:text="${currentTime}">2024-01-01 00:00:00</span></p>
+
+    <div class="input-group">
+        <input type="text" id="nameInput" placeholder="이름을 입력하세요" value="사용자">
+    </div>
+
+    <div class="btn-row">
+        <button class="btn" onclick="callGreetingApi()">인사 API</button>
+        <button class="btn" onclick="callInfoApi()">정보 확인</button>
+    </div>
+
+    <div class="input-group">
+        <input type="number" id="numberInput" placeholder="숫자를 입력하세요" value="5">
+    </div>
+
+    <div class="btn-row">
+        <button class="btn" onclick="callCalculateApi()">제곱 계산</button>
+        <button class="btn" onclick="refreshPage()">새로고침</button>
+    </div>
+
+    <div id="response" class="response">
+        여기에 API 응답이 표시됩니다.
+    </div>
+
+    <p class="footer">Docker로 실행되는 Spring Boot 애플리케이션 #2</p>
+</div>
+
+<script>
+    function callGreetingApi() {
+        const name = document.getElementById('nameInput').value || '사용자';
+        const responseDiv = document.getElementById('response');
+
+        responseDiv.className = 'response loading';
+        responseDiv.textContent = 'API 호출 중...';
+
+        const formData = new FormData();
+        formData.append('name', name);
+
+        fetch('/api/greeting', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.text())
+            .then(data => {
+                responseDiv.className = 'response';
+                responseDiv.textContent = data;
+            })
+            .catch(error => {
+                responseDiv.className = 'response error';
+                responseDiv.textContent = '오류 발생: ' + error.message;
+            });
+    }
+
+    function callInfoApi() {
+        const responseDiv = document.getElementById('response');
+
+        responseDiv.className = 'response loading';
+        responseDiv.textContent = '정보 조회 중...';
+
+        fetch('/api/info')
+            .then(response => response.text())
+            .then(data => {
+                responseDiv.className = 'response';
+                responseDiv.textContent = data;
+            })
+            .catch(error => {
+                responseDiv.className = 'response error';
+                responseDiv.textContent = '오류 발생: ' + error.message;
+            });
+    }
+
+    function callCalculateApi() {
+        const number = document.getElementById('numberInput').value || 5;
+        const responseDiv = document.getElementById('response');
+
+        responseDiv.className = 'response loading';
+        responseDiv.textContent = '계산 중...';
+
+        const formData = new FormData();
+        formData.append('number', number);
+
+        fetch('/api/calculate', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.text())
+            .then(data => {
+                responseDiv.className = 'response';
+                responseDiv.textContent = data;
+            })
+            .catch(error => {
+                responseDiv.className = 'response error';
+                responseDiv.textContent = '오류 발생: ' + error.message;
+            });
+    }
+
+    function refreshPage() {
+        window.location.reload();
+    }
+
+    // 엔터키로 API 호출
+    document.getElementById('nameInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            callGreetingApi();
+        }
+    });
+
+    document.getElementById('numberInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            callCalculateApi();
+        }
+    });
+</script>
+</body>
+</html>
