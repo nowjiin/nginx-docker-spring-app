@@ -151,7 +151,7 @@ curl http://localhost:8081/health
 
 ## Nginx 연동 준비
 
-이 두 Spring Boot 앱은 Nginx 리버스 프록시와 연동하여 사용할 수 있도록 설계되었습니다.
+이 두 Spring Boot 앱은 Nginx 리버스 프록시와 연동하여 사용할 수 있도록 설계되어있습니다.
 
 ### Nginx 설정
 ```nginx
@@ -208,8 +208,8 @@ lsof -i :8080
 ### 이미지 업데이트
 ```bash
 # 최신 이미지 받기
-docker-compose pull
+docker compose pull
 
 # 기존 컨테이너 삭제 후 재생성
-docker-compose up -d --force-recreate
+docker compose up -d --force-recreate
 ```
